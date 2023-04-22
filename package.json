@@ -1,7 +1,7 @@
 {
   "scripts": {
     "build": "eleventy",
-    "serve": "npx eleventy --serve",
+    "serve": "eleventy --serve",
     "debug": "DEBUG=* npx eleventy"
   },
   "dependencies": {
