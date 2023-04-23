@@ -11,6 +11,9 @@
     <meta property="og:title" content="pārģimeni.lv" />
     <meta property="og:description" content="ŪūūŪūŪū" />
     <meta property="og:image" content="./thumbnail.jpg" />
+    <meta name="twitter:title" content="pārģimeni.lv" />
+    <meta name="twitter:description" content="ŪūūŪūŪū" />
+    <meta name="twitter:image" content="./thumbnail.jpg" />
     <meta name="twitter:card" content="summary_large_image" />
     <style>
       html,
@@ -18,10 +21,15 @@
         margin: 0;
         padding: 0;
       }
-      html {
+      html,
+      body {
         background: #fff;
+      }
+      html {
         user-select: none;
         overflow: hidden;
+      }
+      body {
         transition: background 2s ease;
       }
       img {
@@ -33,7 +41,7 @@
       #wrapper {
         height: 100%;
       }
-      html:active {
+      body:active {
         background: #9e3039;
       }
       #wrapper {
