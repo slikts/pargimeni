@@ -1,1 +1,252 @@
-<!doctype html><html><head><title>Page title</title></head><body><p>Hi</p></body></html>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>pārģimeni.lv</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="msapplication-TileColor" content="#da532c" />
+    <meta name="theme-color" content="#ffffff" />
+    <meta property="og:title" content="pārģimeni.lv" />
+    <meta property="og:description" content="ŪūūŪūŪū" />
+    <meta property="og:image" content="./thumbnail.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      html {
+        background: #fff;
+        user-select: none;
+        overflow: hidden;
+        transition: background 2s ease;
+      }
+      img {
+        width: 750px;
+        pointer-events: none;
+      }
+      html,
+      body,
+      #wrapper {
+        height: 100%;
+      }
+      html:active {
+        background: #9e3039;
+      }
+      #wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      img {
+        animation: zoom 10s linear infinite;
+      }
+      body:active #container2 {
+        animation: shake 0.1s ease infinite;
+      }
+      #container3 {
+        /* animation: skew 10s ease infinite; */
+      }
+      #container1 {
+        animation: rotate 20s ease infinite;
+      }
+
+      @keyframes zoom {
+        0% {
+          transform: scale(1, 1);
+        }
+        50% {
+          transform: scale(1.2, 1.2);
+        }
+        100% {
+          transform: scale(1, 1);
+        }
+      }
+
+      @keyframes rotate {
+        0% {
+          transform: rotate(0);
+        }
+        25% {
+          transform: rotate(15deg);
+        }
+        75% {
+          transform: rotate(-15deg);
+        }
+        100% {
+          transform: rotate(0);
+        }
+      }
+
+      @keyframes shake {
+        0% {
+          transform: translate(0, 0) rotate(0deg);
+        }
+        25% {
+          transform: translate(5px, 5px) rotate(5deg);
+        }
+        50% {
+          transform: translate(0, 0) rotate(0eg);
+        }
+        75% {
+          transform: translate(-5px, 5px) rotate(-5deg);
+        }
+        100% {
+          transform: translate(0, 0) rotate(0deg);
+        }
+      }
+
+      @keyframes skew {
+        0% {
+          transform: skewX(-1deg);
+        }
+        25% {
+          transform: skewX(1deg);
+        }
+        50% {
+          transform: skewX(-1deg);
+        }
+        75% {
+          transform: skewX(1deg);
+        }
+        100% {
+          transform: skewX(-1deg);
+        }
+      }
+    </style>
+    <script>
+      var supportsES6 = (function () {
+        try {
+          new Function('(a = 0) => a')
+          return true
+        } catch (err) {
+          return false
+        }
+      })()
+
+      // Web Audio API - White noise, generate, play (volume, fadeIn, fadeOut, loop), stop, fade - v1.0 MJF @ websemantics.uk
+      //*
+      var Noise = (function () {
+        'use strict'
+        if (!supportsES6) {
+          return
+        }
+
+        const audioContext = new (window.AudioContext ||
+          window.webkitAudioContext)()
+
+        let fadeOutTimer
+
+        // https://noisehack.com/generate-noise-web-audio-api/
+        function createNoise(track) {
+          const bufferSize = 2 * audioContext.sampleRate
+          const noiseBuffer = audioContext.createBuffer(
+            1,
+            bufferSize,
+            audioContext.sampleRate,
+          )
+          const output = noiseBuffer.getChannelData(0)
+
+          for (let i = 0; i < bufferSize; i++) {
+            output[i] = Math.random() * 2 - 1
+          }
+
+          track.audioSource.buffer = noiseBuffer
+        }
+
+        function stopNoise(track) {
+          if (track.audioSource) {
+            clearTimeout(fadeOutTimer)
+            track.audioSource.stop()
+          }
+        }
+
+        function fadeNoise(track) {
+          if (track.fadeOut) {
+            track.fadeOut = track.fadeOut >= 0 ? track.fadeOut : 0.5
+          } else {
+            track.fadeOut = 0.5
+          }
+
+          if (track.canFade) {
+            track.gainNode.gain.linearRampToValueAtTime(
+              0,
+              audioContext.currentTime + track.fadeOut,
+            )
+
+            track.canFade = false
+
+            fadeOutTimer = setTimeout(() => {
+              stopNoise(track)
+            }, track.fadeOut * 1000)
+          } else {
+            stopNoise(track)
+          }
+        }
+
+        function buildTrack(track) {
+          track.audioSource = audioContext.createBufferSource()
+          track.gainNode = audioContext.createGain()
+          track.audioSource.connect(track.gainNode)
+          track.gainNode.connect(audioContext.destination)
+          track.canFade = true // used to prevent fadeOut firing twice
+        }
+
+        function setGain(track) {
+          track.volume = track.volume >= 0 ? track.volume : 0.5
+
+          if (track.fadeIn) {
+            track.fadeIn = track.fadeIn >= 0 ? track.fadeIn : 0.5
+          } else {
+            track.fadeIn = 0.5
+          }
+
+          track.gainNode.gain.setValueAtTime(0, audioContext.currentTime)
+
+          track.gainNode.gain.linearRampToValueAtTime(
+            track.volume / 4,
+            audioContext.currentTime + track.fadeIn / 2,
+          )
+
+          track.gainNode.gain.linearRampToValueAtTime(
+            track.volume,
+            audioContext.currentTime + track.fadeIn,
+          )
+        }
+
+        function playNoise(track) {
+          stopNoise(track)
+          buildTrack(track)
+          createNoise(track)
+          setGain(track)
+          track.audioSource.loop = true
+          track.audioSource.start()
+        }
+
+        // Expose functions:
+        return {
+          play: playNoise,
+          stop: stopNoise,
+          fade: fadeNoise,
+        }
+      })()
+    </script>
+  </head>
+  <body
+    onmousedown="Noise.play(noise2={volume:.01,fadeIn:5,fadeOut:.5})"
+    onmouseup="Noise.fade(noise2)"
+  >
+    <div id="wrapper">
+      <div id="container1">
+        <div id="container2">
+          <div id="container3">
+            <img src="./gosti.svg" alt="Pārdabisku ģimeni" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
