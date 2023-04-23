@@ -29,4 +29,4 @@ jobs:
         with:
           publish_dir: ./_site
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          cname: parģimeni.lv
+          cname: xn--primeni-s3a12a.lv
