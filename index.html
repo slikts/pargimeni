@@ -43,7 +43,7 @@
         transition: background 2s ease;
       }
       img {
-        width: 750px;
+        width: 100%;
         pointer-events: none;
       }
       html,
@@ -59,14 +59,14 @@
         align-items: center;
         justify-content: center;
       }
-      img {
-        animation: zoom 10s linear infinite;
-      }
       body:active #container2 {
         animation: shake 0.1s ease infinite;
       }
       #container3 {
-        /* animation: skew 10s ease infinite; */
+        width: 750px;
+        cursor: pointer;
+        border-radius: 50%;
+        animation: zoom 10s linear infinite;
       }
       #container1 {
         animation: rotate 20s ease infinite;
